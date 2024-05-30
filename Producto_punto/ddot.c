@@ -1,6 +1,6 @@
 /**
     @brief Sample program for cblas_ddot function
-    @author Julio Jos&eacute; &Aacute;guila Guerrero
+    @autor Julio José Águila Guerrero
     @date March 24th, 2022
 */
 #ifndef _GNU_SOURCE
@@ -16,7 +16,9 @@
 #include <string.h>
 #include <sys/time.h>
 #include <omp.h>
-static int main_ddot(const int t, const int n, const int elements_type, const char* verbose);
+
+static int main_ddot(const int t, const CBLAS_INDEX n, const int elements_type, const char* verbose);
+
 int main
 (
     int argc,
@@ -27,17 +29,17 @@ int main
     fputc('\n', stdout);
     if(argc != 5)
     {
-        fprintf(stdout, "Use: ddot <t:int> <n:int> <0|1|2> <on|off>.\n");
+        fprintf(stdout, "Use: ddot <t:int> <n:CBLAS_INDEX> <0|1|2> <on|off>.\n");
         return EXIT_FAILURE;
     }
-    main_ddot(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), argv[4]);
+    main_ddot(atoi(argv[1]), (CBLAS_INDEX)atoi(argv[2]), atoi(argv[3]), argv[4]);
     return EXIT_SUCCESS;
 }
 
 static int main_ddot
 (
     const int t,
-    const int n,
+    const CBLAS_INDEX n,
     const int elements_type,
     const char* verbose
 )
@@ -45,11 +47,11 @@ static int main_ddot
     double c = 0.0;
     double* x = NULL;
     double* y = NULL;
-    int incx = 1;
-    int incy = 1;
+    CBLAS_INDEX incx = 1;
+    CBLAS_INDEX incy = 1;
     struct timeval start, finish;
     double runtime = 0.0; // seconds.
-    int n_aux = 0;
+    CBLAS_INDEX n_aux = 0;
 
     assert(n > 0);
     assert(elements_type >= ZEROS && elements_type <= RAND);

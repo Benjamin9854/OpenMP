@@ -6,11 +6,18 @@ export LC_NUMERIC=C
 # Archivo para almacenar los datos de tiempo de ejecución
 echo "" > dgemm.dat
 
-# Ejecutar dgemm para cada número de hilos de 2 4 8 y 16
-for i in {2,4,8,16}
+# Ejecutar dgemm para cada número de hilos de 1, 2, 4 y 8
+for i in 1 2 4 8
 do
-    ./dgemm "${i}" "${val}" "${val}" "${val}" 1 off | awk $info '/^Data/ { print $2 " " $3}' >> dgemm.dat
-    echo "${i} ${val} test finished"
+    sum=0
+    for j in {1..10}
+    do
+        time=$(./dgemm "$i" "$val" "$val" "$val" 1 off | awk '/^Data/ { print $3 }')
+        sum=$(echo "$sum + $time" | bc -l)
+    done
+    avg=$(echo "scale=6; $sum / 10" | bc -l)
+    printf "%d %.6f\n" "$i" "$avg" >> dgemm.dat
+    echo "$i $val test finished"
 done
 
 gnuplot < dgemm.p

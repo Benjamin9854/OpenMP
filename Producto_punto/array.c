@@ -1,6 +1,6 @@
 /**
     @brief Functions implementation for arrays: source file
-    @author Julio Jos&eacute; &Aacute;guila Guerrero
+    @author Julio José Águila Guerrero
     @date March 20th, 2021
 */
 #ifndef _GNU_SOURCE
@@ -13,15 +13,17 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <cblas.h>  // Incluir la cabecera de CBLAS para CBLAS_INDEX
+
 double* array_new
 (
-    const int m,
-    const int n,
+    const CBLAS_INDEX m,
+    const CBLAS_INDEX n,
     const int elements_type
 )
 {
     double* array = NULL;
-    int i = 0;
+    CBLAS_INDEX i = 0;
     assert(m > 0);
     assert(n > 0);
     assert(elements_type >= ZEROS && elements_type <= RAND);
@@ -44,14 +46,14 @@ double* array_new
 
 int array_show
 (
-    const int m,
-    const int n,
+    const CBLAS_INDEX m,
+    const CBLAS_INDEX n,
     const double* array,
     const char* array_name
 )
 {
-    int i = 0;
-    int j = 0;
+    CBLAS_INDEX i = 0;
+    CBLAS_INDEX j = 0;
     assert(m > 0);
     assert(n > 0);
     assert(array != NULL);

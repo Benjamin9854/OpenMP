@@ -1,6 +1,6 @@
 /**
     @brief Sample program for cblas_dgemm function
-    @author Julio Jos&eacute; &Aacute;guila Guerrero
+    @autor Julio José Águila Guerrero
     @date April 30th, 2021
 */
 #ifndef _GNU_SOURCE
@@ -16,7 +16,9 @@
 #include <string.h>
 #include <sys/time.h>
 #include <omp.h>
-static int main_dgemm(const int t, const int m, const int n, const int k, const int elements_type, const char* verbose);
+
+static int main_dgemm(const int t, const CBLAS_INDEX m, const CBLAS_INDEX n, const CBLAS_INDEX k, const int elements_type, const char* verbose);
+
 int main
 (
     int argc,
@@ -27,18 +29,19 @@ int main
     fputc('\n', stdout);
     if(argc != 7)
     {
-        fprintf(stdout, "Use: dgemm <t:int> <m:int> <n:int> <k:int> <0|1|2> <on|off>.\n");
+        fprintf(stdout, "Use: dgemm <t:int> <m:CBLAS_INDEX> <n:CBLAS_INDEX> <k:CBLAS_INDEX> <0|1|2> <on|off>.\n");
         return EXIT_FAILURE;
     }
-    main_dgemm( atoi( argv[ 1]), atoi( argv[ 2]), atoi( argv[ 3]), atoi( argv[ 4]), atoi( argv[ 5]), argv[ 6]);
+    main_dgemm(atoi(argv[1]), (CBLAS_INDEX)atoi(argv[2]), (CBLAS_INDEX)atoi(argv[3]), (CBLAS_INDEX)atoi(argv[4]), atoi(argv[5]), argv[6]);
     return EXIT_SUCCESS;
 }
+
 static int main_dgemm
 (
     const int t,
-    const int m,
-    const int n,
-    const int k,
+    const CBLAS_INDEX m,
+    const CBLAS_INDEX n,
+    const CBLAS_INDEX k,
     const int elements_type,
     const char* verbose
 )
@@ -48,12 +51,12 @@ static int main_dgemm
     double* C = NULL;
     double alpha = 1.0;
     double beta = 0.0;
-    int lda = k;
-    int ldb = n;
-    int ldc = n;
+    CBLAS_INDEX lda = k;
+    CBLAS_INDEX ldb = n;
+    CBLAS_INDEX ldc = n;
     struct timeval start, finish;
     double runtime = 0.0; // seconds.
-    int m_aux = 0;
+    CBLAS_INDEX m_aux = 0;
 
     assert(m > 0);
     assert(n > 0);
@@ -81,7 +84,7 @@ static int main_dgemm
         array_show(k, n, B, "B");
     }
     array_show(m, n, C, "C");
-    runtime = timeval_diff( &finish, &start);
+    runtime = timeval_diff(&finish, &start);
     fprintf(stdout, "Data: %d %lf\n", t, runtime);
     free(A);
     free(B);
